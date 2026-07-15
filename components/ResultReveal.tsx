@@ -3,6 +3,8 @@
 import { LifeEstimate } from "@/lib/lifeExpectancy";
 import { getCountry } from "@/lib/countries";
 import AnimatedNumber from "./AnimatedNumber";
+import SectionIndex from "./SectionIndex";
+import Badge from "./Badge";
 
 export default function ResultReveal({
   estimate,
@@ -14,13 +16,12 @@ export default function ResultReveal({
   const country = getCountry(countryCode);
 
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center">
-      <p className="reveal mb-6 font-mono-nums text-xs uppercase tracking-[0.4em] text-bone-dim">
-        Тооцоолсон нийт наслах нас
-      </p>
+    <section className="relative flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center">
+      <SectionIndex n={1} total={6} className="absolute right-6 top-24" />
+      <Badge className="reveal mb-6">Тооцоолсон нийт наслах нас</Badge>
 
       <div className="reveal flex items-baseline justify-center gap-3">
-        <span className="glow-ember font-mono-nums text-7xl font-semibold text-ember sm:text-9xl">
+        <span className="glow-ember font-mono-nums text-7xl font-black text-ember sm:text-9xl">
           <AnimatedNumber value={estimate.totalYears} decimals={1} />
         </span>
         <span className="text-2xl text-bone-dim sm:text-3xl">нас</span>

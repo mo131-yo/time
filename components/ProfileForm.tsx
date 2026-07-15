@@ -2,17 +2,25 @@
 
 import { useState } from "react";
 import { COUNTRIES, DEFAULT_COUNTRY_CODE, Sex } from "@/lib/countries";
-import {
-  Alcohol,
-  Exercise,
-  LifeProfile,
-  Smoking,
-} from "@/lib/lifeExpectancy";
+import { LifeProfile, SmokingStatus } from "@/lib/lifeExpectancy";
+import { useMagnetic } from "./useMagnetic";
+import SectionIndex from "./SectionIndex";
 
 const field =
   "w-full rounded-lg border border-ash bg-ink-2 px-4 py-3 text-bone outline-none transition-colors focus:border-ember";
 const labelCls =
   "mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-bone-dim";
+
+function toggleBtnCls(active: boolean) {
+  return `rounded-lg border px-4 py-3 text-sm transition-colors ${
+    active
+      ? "border-ember bg-ember/10 text-ember"
+      : "border-ash bg-ink-2 text-bone-dim hover:border-bone-dim"
+  }`;
+}
+
+type AlcoholUse = "none" | "some";
+type ExerciseUse = "none" | "some";
 
 export default function ProfileForm({
   initial,
@@ -32,11 +40,28 @@ export default function ProfileForm({
   const [weightKg, setWeightKg] = useState(
     initial?.weightKg ? String(initial.weightKg) : "",
   );
-  const [smoking, setSmoking] = useState<Smoking>(initial?.smoking ?? "none");
-  const [alcohol, setAlcohol] = useState<Alcohol>(initial?.alcohol ?? "none");
-  const [exercise, setExercise] = useState<Exercise>(
-    initial?.exercise ?? "some",
+
+  const [smokingStatus, setSmokingStatus] = useState<SmokingStatus>(
+    initial?.smokingStatus ?? "never",
   );
+  const [cigarettesPerDay, setCigarettesPerDay] = useState(
+    initial?.cigarettesPerDay ? String(initial.cigarettesPerDay) : "",
+  );
+
+  const [alcoholUse, setAlcoholUse] = useState<AlcoholUse>(
+    initial && initial.drinkOccasionsPerWeek > 0 ? "some" : "none",
+  );
+  const [drinkOccasionsPerWeek, setDrinkOccasionsPerWeek] = useState(
+    initial?.drinkOccasionsPerWeek ? String(initial.drinkOccasionsPerWeek) : "",
+  );
+
+  const [exerciseUse, setExerciseUse] = useState<ExerciseUse>(
+    initial && initial.exerciseMinPerWeek > 0 ? "some" : "none",
+  );
+  const [exerciseMinPerWeek, setExerciseMinPerWeek] = useState(
+    initial?.exerciseMinPerWeek ? String(initial.exerciseMinPerWeek) : "",
+  );
+
   const [error, setError] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
@@ -50,6 +75,27 @@ export default function ProfileForm({
     if (!h || h < 50 || h > 260) return setError("Өндрөө (см) зөв оруулна уу.");
     if (!w || w < 20 || w > 400) return setError("Жингээ (кг) зөв оруулна уу.");
 
+    let cigs = 0;
+    if (smokingStatus === "current") {
+      cigs = Number(cigarettesPerDay);
+      if (!cigs || cigs < 1 || cigs > 100)
+        return setError("Өдөрт хэдэн ширхэг татдагаа (1–100) оруулна уу.");
+    }
+
+    let drinks = 0;
+    if (alcoholUse === "some") {
+      drinks = Number(drinkOccasionsPerWeek);
+      if (!drinks || drinks < 1 || drinks > 70)
+        return setError("7 хоногт хэдэн удаа хэрэглэдгээ (1–70) оруулна уу.");
+    }
+
+    let exerciseMin = 0;
+    if (exerciseUse === "some") {
+      exerciseMin = Number(exerciseMinPerWeek);
+      if (!exerciseMin || exerciseMin < 1 || exerciseMin > 2000)
+        return setError("7 хоногт нийт хэдэн минут дасгал хийдгээ оруулна уу.");
+    }
+
     setError("");
     onSubmit({
       sex,
@@ -57,19 +103,23 @@ export default function ProfileForm({
       countryCode,
       heightCm: h,
       weightKg: w,
-      smoking,
-      alcohol,
-      exercise,
+      smokingStatus,
+      cigarettesPerDay: cigs,
+      drinkOccasionsPerWeek: drinks,
+      exerciseMinPerWeek: exerciseMin,
     });
   }
+
+  const submitRef = useMagnetic<HTMLButtonElement>();
 
   return (
     <section
       id="form"
-      className="flex min-h-screen flex-col items-center justify-center px-6 py-24"
+      className="relative flex min-h-screen flex-col items-center justify-center px-6 py-24"
     >
+      <SectionIndex n={3} total={3} className="absolute right-6 top-24" />
       <div className="reveal w-full max-w-xl">
-        <h2 className="mb-2 text-3xl font-semibold tracking-tight text-bone">
+        <h2 className="mb-2 text-3xl font-black tracking-tight text-bone">
           Өөрийнхөө тухай хэлээч
         </h2>
         <p className="mb-10 text-sm text-bone-dim">
@@ -91,11 +141,7 @@ export default function ProfileForm({
                   type="button"
                   key={v}
                   onClick={() => setSex(v)}
-                  className={`rounded-lg border px-4 py-3 text-sm transition-colors ${
-                    sex === v
-                      ? "border-ember bg-ember/10 text-ember"
-                      : "border-ash bg-ink-2 text-bone-dim hover:border-bone-dim"
-                  }`}
+                  className={toggleBtnCls(sex === v)}
                 >
                   {label}
                 </button>
@@ -171,61 +217,126 @@ export default function ProfileForm({
 
           {/* Тамхи */}
           <div>
-            <label htmlFor="smoking" className={labelCls}>
-              Тамхи
-            </label>
-            <select
-              id="smoking"
-              value={smoking}
-              onChange={(e) => setSmoking(e.target.value as Smoking)}
-              className={field}
-            >
-              <option value="none">Татдаггүй</option>
-              <option value="former">Хаясан</option>
-              <option value="light">Бага зэрэг татдаг</option>
-              <option value="heavy">Их татдаг</option>
-            </select>
+            <span className={labelCls}>Тамхи</span>
+            <div className="grid grid-cols-3 gap-3">
+              {(
+                [
+                  ["never", "Татдаггүй"],
+                  ["former", "Хаясан"],
+                  ["current", "Татдаг"],
+                ] as [SmokingStatus, string][]
+              ).map(([v, label]) => (
+                <button
+                  type="button"
+                  key={v}
+                  onClick={() => setSmokingStatus(v)}
+                  className={toggleBtnCls(smokingStatus === v)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {smokingStatus === "current" && (
+              <div className="mt-3">
+                <label htmlFor="cigs" className={labelCls}>
+                  Өдөрт хэдэн ширхэг татдаг вэ?
+                </label>
+                <input
+                  id="cigs"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="10"
+                  value={cigarettesPerDay}
+                  onChange={(e) => setCigarettesPerDay(e.target.value)}
+                  className={field}
+                />
+              </div>
+            )}
           </div>
 
           {/* Архи */}
           <div>
-            <label htmlFor="alcohol" className={labelCls}>
-              Архи
-            </label>
-            <select
-              id="alcohol"
-              value={alcohol}
-              onChange={(e) => setAlcohol(e.target.value as Alcohol)}
-              className={field}
-            >
-              <option value="none">Хэрэглэдэггүй</option>
-              <option value="moderate">Дунд зэрэг</option>
-              <option value="heavy">Их хэрэглэдэг</option>
-            </select>
+            <span className={labelCls}>Архи</span>
+            <div className="grid grid-cols-2 gap-3">
+              {(
+                [
+                  ["none", "Хэрэглэдэггүй"],
+                  ["some", "Хэрэглэдэг"],
+                ] as [AlcoholUse, string][]
+              ).map(([v, label]) => (
+                <button
+                  type="button"
+                  key={v}
+                  onClick={() => setAlcoholUse(v)}
+                  className={toggleBtnCls(alcoholUse === v)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {alcoholUse === "some" && (
+              <div className="mt-3">
+                <label htmlFor="drinks" className={labelCls}>
+                  7 хоногт хэдэн удаа хэрэглэдэг вэ?
+                </label>
+                <input
+                  id="drinks"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="2"
+                  value={drinkOccasionsPerWeek}
+                  onChange={(e) => setDrinkOccasionsPerWeek(e.target.value)}
+                  className={field}
+                />
+              </div>
+            )}
           </div>
 
           {/* Дасгал */}
           <div>
-            <label htmlFor="exercise" className={labelCls}>
-              Дасгал хөдөлгөөн
-            </label>
-            <select
-              id="exercise"
-              value={exercise}
-              onChange={(e) => setExercise(e.target.value as Exercise)}
-              className={field}
-            >
-              <option value="none">Хийдэггүй</option>
-              <option value="some">Хааяа</option>
-              <option value="regular">Тогтмол</option>
-            </select>
+            <span className={labelCls}>Дасгал хөдөлгөөн</span>
+            <div className="grid grid-cols-2 gap-3">
+              {(
+                [
+                  ["none", "Хийдэггүй"],
+                  ["some", "Хийдэг"],
+                ] as [ExerciseUse, string][]
+              ).map(([v, label]) => (
+                <button
+                  type="button"
+                  key={v}
+                  onClick={() => setExerciseUse(v)}
+                  className={toggleBtnCls(exerciseUse === v)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {exerciseUse === "some" && (
+              <div className="mt-3">
+                <label htmlFor="exerciseMin" className={labelCls}>
+                  7 хоногт нийт хэдэн минут дасгал хийдэг вэ?
+                </label>
+                <input
+                  id="exerciseMin"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="180"
+                  value={exerciseMinPerWeek}
+                  onChange={(e) => setExerciseMinPerWeek(e.target.value)}
+                  className={field}
+                />
+              </div>
+            )}
           </div>
 
           {error && <p className="text-sm text-ember">{error}</p>}
 
           <button
+            ref={submitRef}
             type="submit"
-            className="w-full rounded-full bg-ember px-8 py-4 text-sm font-semibold tracking-wide text-ink transition-all hover:shadow-[0_0_40px_-6px_rgba(224,96,58,0.7)]"
+            data-cursor-hover
+            className="btn-primary w-full"
           >
             Амьдралаа тооцоол
           </button>

@@ -37,43 +37,35 @@ export function percentUsed(
 export interface Breakdown {
   years: number;
   months: number;
-  weeks: number;
   days: number;
   hours: number;
   minutes: number;
+  /** Аравтын бутархайтай (жишээ нь 36.4) — секунд нь бодит цагаар тасралтгүй урсдаг мэдрэмж өгнө. */
   seconds: number;
   totalSeconds: number;
   expired: boolean;
 }
 
 /**
- * Үлдсэн хугацааг жил/сар/долоо хоног/өдөр/цаг/мин/сек болгон задална.
- * Задаргаа нь дараалсан (nested) — өөрөөр хэлбэл нийлбэр нь яг үлдсэн хугацаа.
+ * `ms`-ийг жил/сар/өдөр/цаг/мин/сек болгон задална (nested — нийлбэр нь яг `ms`).
+ * `remainingBreakdown` болон `elapsedBreakdown` хоёулаа үүгээр дамждаг дундын логик.
  */
-export function remainingBreakdown(
-  deathDate: string,
-  now: number = Date.now(),
-): Breakdown {
-  const death = new Date(deathDate).getTime();
-  let remaining = death - now;
-
-  if (remaining <= 0) {
+function breakdownBetween(ms: number): Breakdown {
+  if (ms <= 0) {
     return {
-      years: 0, months: 0, weeks: 0, days: 0,
+      years: 0, months: 0, days: 0,
       hours: 0, minutes: 0, seconds: 0, totalSeconds: 0, expired: true,
     };
   }
 
-  const totalSeconds = Math.floor(remaining / MS.second);
+  const totalSeconds = ms / MS.second;
+  let remaining = ms;
 
   const years = Math.floor(remaining / MS.year);
   remaining -= years * MS.year;
 
   const months = Math.floor(remaining / MS.month);
   remaining -= months * MS.month;
-
-  const weeks = Math.floor(remaining / MS.week);
-  remaining -= weeks * MS.week;
 
   const days = Math.floor(remaining / MS.day);
   remaining -= days * MS.day;
@@ -84,9 +76,27 @@ export function remainingBreakdown(
   const minutes = Math.floor(remaining / MS.minute);
   remaining -= minutes * MS.minute;
 
-  const seconds = Math.floor(remaining / MS.second);
+  const seconds = remaining / MS.second;
 
-  return { years, months, weeks, days, hours, minutes, seconds, totalSeconds, expired: false };
+  return { years, months, days, hours, minutes, seconds, totalSeconds, expired: false };
+}
+
+/** Үлдсэн хугацааг жил/сар/өдөр/цаг/мин/сек болгон задална. */
+export function remainingBreakdown(
+  deathDate: string,
+  now: number = Date.now(),
+): Breakdown {
+  const death = new Date(deathDate).getTime();
+  return breakdownBetween(death - now);
+}
+
+/** Төрснөөс хойш өнгөрсөн хугацааг жил/сар/өдөр/цаг/мин/сек болгон задална. */
+export function elapsedBreakdown(
+  birthDate: string,
+  now: number = Date.now(),
+): Breakdown {
+  const birth = new Date(birthDate).getTime();
+  return breakdownBetween(now - birth);
 }
 
 /** Үлдсэн хугацааг тухайн нэгжийн нийт тоогоор (жишээ нь нийт хоног). */

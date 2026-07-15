@@ -14,6 +14,9 @@ import PercentUsed from "@/components/PercentUsed";
 import YearConversion from "@/components/YearConversion";
 import LiveCountdown from "@/components/LiveCountdown";
 import Disclaimer from "@/components/Disclaimer";
+import YearEndCountdown from "@/components/YearEndCountdown";
+import Marquee from "@/components/Marquee";
+import StatBand from "@/components/StatBand";
 
 export default function Home() {
   const [profile, setProfile] = useState<LifeProfile | null>(null);
@@ -46,9 +49,8 @@ export default function Home() {
   function handleReset() {
     clearProfile();
     setProfile(null);
-    requestAnimationFrame(() =>
-      window.scrollTo({ top: 0, behavior: "smooth" }),
-    );
+    // Профайл цэвэрлэгдэж, форм дахин рендэрлэгдэх хүртэл хүлээгээд шууд форм руу гүйлгэнэ
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollToForm()));
   }
 
   function scrollToForm() {
@@ -65,6 +67,8 @@ export default function Home() {
       {!profile || !estimate ? (
         <>
           <Hero onStart={scrollToForm} />
+          <Marquee />
+          <YearEndCountdown sectionN={2} sectionTotal={3} />
           <ProfileForm onSubmit={handleSubmit} />
         </>
       ) : (
@@ -73,8 +77,11 @@ export default function Home() {
             estimate={estimate}
             countryCode={profile.countryCode}
           />
+          <StatBand profile={profile} estimate={estimate} />
+          <Marquee />
           <PercentUsed profile={profile} estimate={estimate} />
           <YearConversion estimate={estimate} />
+          <YearEndCountdown sectionN={4} sectionTotal={6} />
           <LiveCountdown estimate={estimate} />
           <Disclaimer onReset={handleReset} />
         </>

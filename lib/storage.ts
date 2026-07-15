@@ -9,8 +9,17 @@ export function loadProfile(): LifeProfile | null {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as LifeProfile;
-    // Наад захын баталгаажуулалт
-    if (!parsed.birthDate || !parsed.sex || !parsed.countryCode) return null;
+    // Наад захын баталгаажуулалт — хуучин (тоон бус дадал зуршилтай) хэлбэрийн
+    // профайл байвал null буцааж, хэрэглэгчийг форм руу дахин чиглүүлнэ.
+    if (
+      !parsed.birthDate ||
+      !parsed.sex ||
+      !parsed.countryCode ||
+      !parsed.smokingStatus ||
+      typeof parsed.drinkOccasionsPerWeek !== "number" ||
+      typeof parsed.exerciseMinPerWeek !== "number"
+    )
+      return null;
     return parsed;
   } catch {
     return null;

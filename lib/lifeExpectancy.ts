@@ -1,8 +1,6 @@
 import { baseLifeExpectancy, Sex } from "./countries";
 
-export type Smoking = "none" | "former" | "light" | "heavy";
-export type Alcohol = "none" | "moderate" | "heavy";
-export type Exercise = "none" | "some" | "regular";
+export type SmokingStatus = "never" | "former" | "current";
 
 export interface LifeProfile {
   sex: Sex;
@@ -10,9 +8,13 @@ export interface LifeProfile {
   countryCode: string;
   heightCm: number;
   weightKg: number;
-  smoking: Smoking;
-  alcohol: Alcohol;
-  exercise: Exercise;
+  smokingStatus: SmokingStatus;
+  /** Зөвхөн smokingStatus === "current" үед хэрэглэгдэнэ, бусад тохиолдолд 0. */
+  cigarettesPerDay: number;
+  /** 7 хоногт архи хэрэглэдэг удаа. 0 = хэрэглэдэггүй. */
+  drinkOccasionsPerWeek: number;
+  /** 7 хоногт дасгал хийдэг минут. 0 = хийдэггүй. */
+  exerciseMinPerWeek: number;
 }
 
 export interface LifeEstimate {
@@ -30,6 +32,10 @@ export interface LifeEstimate {
 
 export const BMI_ADJUSTMENTS = { normal: 0, over: -1, obese: -3, under: -1 };
 
+function clamp(n: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, n));
+}
+
 export function bmiOf(heightCm: number, weightKg: number): number {
   const m = heightCm / 100;
   if (m <= 0) return 0;
@@ -44,24 +50,52 @@ function bmiFactor(bmi: number): { label: string; delta: number } {
   return { label: "Таргалалт (BMI ≥ 30)", delta: BMI_ADJUSTMENTS.obese };
 }
 
-const SMOKING_FACTOR: Record<Smoking, { label: string; delta: number }> = {
-  none: { label: "Тамхи татдаггүй", delta: 0 },
-  former: { label: "Тамхи хаясан", delta: -1 },
-  light: { label: "Бага зэрэг тамхи татдаг", delta: -3 },
-  heavy: { label: "Их тамхи татдаг", delta: -7 },
-};
+/**
+ * Тамхины нөлөө. Өдөрт татах ширхэгийн тоо ихсэх тусам ойролцоогоор шугаман
+ * буурч, дээд тал нь −10 жилээр хязгаарлагдана (маш ойролцоо тооцоо).
+ */
+function smokingFactor(
+  status: SmokingStatus,
+  cigarettesPerDay: number,
+): { label: string; delta: number } {
+  if (status === "never") return { label: "Тамхи татдаггүй", delta: 0 };
+  if (status === "former") return { label: "Тамхи хаясан", delta: -1 };
+  const delta = -clamp(1 + cigarettesPerDay * 0.3, 1, 10);
+  return {
+    label: `Тамхи татдаг (${cigarettesPerDay} ш/өдөрт)`,
+    delta,
+  };
+}
 
-const ALCOHOL_FACTOR: Record<Alcohol, { label: string; delta: number }> = {
-  none: { label: "Архи хэрэглэдэггүй", delta: 0 },
-  moderate: { label: "Дунд зэрэг архи хэрэглэдэг", delta: 0.5 },
-  heavy: { label: "Их архи хэрэглэдэг", delta: -3 },
-};
+/**
+ * Архины нөлөө. 7 хоногт 1–7 удаа дунд зэргийн хэрэглээг бага эрсдэлтэй
+ * гэж үзнэ (+0.5); 14-с дээш удаа бол эрсдэл шугаман нэмэгдэж −5 хүртэл хасна.
+ */
+function alcoholFactor(occasionsPerWeek: number): {
+  label: string;
+  delta: number;
+} {
+  if (occasionsPerWeek <= 0)
+    return { label: "Архи хэрэглэдэггүй", delta: 0 };
+  const label = `Архи хэрэглэдэг (7 хоногт ${occasionsPerWeek} удаа)`;
+  if (occasionsPerWeek <= 7) return { label, delta: 0.5 };
+  if (occasionsPerWeek <= 14) return { label, delta: 0 };
+  return { label, delta: -clamp((occasionsPerWeek - 14) * 0.3, 0, 5) };
+}
 
-const EXERCISE_FACTOR: Record<Exercise, { label: string; delta: number }> = {
-  none: { label: "Дасгал хийдэггүй", delta: -1 },
-  some: { label: "Хааяа дасгал хийдэг", delta: 1 },
-  regular: { label: "Тогтмол дасгал хийдэг", delta: 3 },
-};
+/**
+ * Дасгалын нөлөө. ДЭМБ-ын зөвлөдөг 7 хоногт 150 минутаас цөөн байвал бага
+ * эерэг нөлөөтэй; 150-аас дээш байвал илүү их эерэг нөлөөтэй (дээд тал +4.5).
+ */
+function exerciseFactor(minPerWeek: number): {
+  label: string;
+  delta: number;
+} {
+  if (minPerWeek <= 0) return { label: "Дасгал хийдэггүй", delta: -1 };
+  const label = `Дасгал хийдэг (7 хоногт ${minPerWeek} мин)`;
+  if (minPerWeek < 150) return { label, delta: 1 };
+  return { label, delta: clamp(3 + (minPerWeek - 150) * 0.005, 3, 4.5) };
+}
 
 /** Төрсөн огноо болон одоо/огнооноос нас (жилээр, аравтын оронтой) тооцоолно. */
 export function ageFromBirth(birthDate: string, now: number = Date.now()): number {
@@ -78,9 +112,9 @@ export function estimateLifeExpectancy(
 
   const factors = [
     bmiFactor(bmi),
-    SMOKING_FACTOR[profile.smoking],
-    ALCOHOL_FACTOR[profile.alcohol],
-    EXERCISE_FACTOR[profile.exercise],
+    smokingFactor(profile.smokingStatus, profile.cigarettesPerDay),
+    alcoholFactor(profile.drinkOccasionsPerWeek),
+    exerciseFactor(profile.exerciseMinPerWeek),
   ];
 
   const totalDelta = factors.reduce((sum, f) => sum + f.delta, 0);
