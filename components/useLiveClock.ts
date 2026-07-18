@@ -12,7 +12,6 @@ export function useLiveClock(intervalMs: number = 100): number {
   const [now, setNow] = useState<number>(() => Date.now());
 
   useEffect(() => {
-    setNow(Date.now());
     let cancelled = false;
     let fallbackId: ReturnType<typeof setInterval> | null = setInterval(
       () => setNow(Date.now()),

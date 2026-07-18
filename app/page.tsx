@@ -22,10 +22,18 @@ export default function Home() {
   const [profile, setProfile] = useState<LifeProfile | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
-  // localStorage-оос профайл ачаална (зөвхөн client дээр)
+  // localStorage-оос профайл ачаална (зөвхөн client дээр).
+  // setState-ийг microtask-д хойшлуулж effect доторх sync cascade-аас зайлсхийв.
   useEffect(() => {
-    setProfile(loadProfile());
-    setHydrated(true);
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      setProfile(loadProfile());
+      setHydrated(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // deathDate profile-оос гарна; тооцоолол нь Date.now()-оос хамааралгүй хэсэг
@@ -67,7 +75,6 @@ export default function Home() {
       {!profile || !estimate ? (
         <>
           <Hero onStart={scrollToForm} />
-          <Marquee />
           <YearEndCountdown sectionN={2} sectionTotal={3} />
           <ProfileForm onSubmit={handleSubmit} />
         </>

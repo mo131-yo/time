@@ -21,7 +21,7 @@ export default function ResultReveal({
       <Badge className="reveal mb-6">Тооцоолсон нийт наслах нас</Badge>
 
       <div className="reveal flex items-baseline justify-center gap-3">
-        <span className="glow-ember font-mono-nums text-7xl font-black text-ember sm:text-9xl">
+        <span className="font-mono-nums text-7xl font-black text-ember sm:text-9xl">
           <AnimatedNumber value={estimate.totalYears} decimals={1} />
         </span>
         <span className="text-2xl text-bone-dim sm:text-3xl">нас</span>

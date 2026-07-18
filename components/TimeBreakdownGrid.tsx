@@ -19,9 +19,7 @@ function Cell({
     <div className="flex flex-col items-center">
       <span
         className={`font-mono-nums tabular-nums ${
-          emphasize
-            ? "glow-ember text-ember"
-            : "text-bone"
+          emphasize ? "text-ember" : "text-bone"
         } ${
           size === "lg"
             ? emphasize

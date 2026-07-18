@@ -13,7 +13,7 @@ export default function Marquee({ items = DEFAULT_ITEMS }: { items?: string[] })
     <div className="flex shrink-0 items-center gap-8 pr-8">
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-8">
-          <span className="text-sm font-black uppercase tracking-[0.15em] text-bone-dim sm:text-base">
+          <span className="text-base font-black uppercase tracking-[0.15em] text-bone-dim sm:text-lg">
             {item}
           </span>
           <span className="text-ember">✦</span>

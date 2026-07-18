@@ -9,6 +9,8 @@ interface Props {
   className?: string;
   /** Мянгатын таслал тавих эсэх */
   group?: boolean;
+  /** true бол дэлгэцэнд орж ирэх хүртэл 0 дээр хүлээгээд дараа нь эхэлнэ */
+  startOnView?: boolean;
 }
 
 /**
@@ -21,11 +23,33 @@ export default function AnimatedNumber({
   duration = 1.6,
   className,
   group = false,
+  startOnView = false,
 }: Props) {
   const [display, setDisplay] = useState(0);
+  const [inView, setInView] = useState(!startOnView);
   const fromRef = useRef(0);
+  const spanRef = useRef<HTMLSpanElement>(null);
+
+  // startOnView: дэлгэцэнд орж ирэхийг нэг удаа ажиглана
+  useEffect(() => {
+    if (!startOnView) return;
+    const el = spanRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [startOnView]);
 
   useEffect(() => {
+    if (!inView) return;
     let cancelled = false;
     const start = fromRef.current;
 
@@ -48,11 +72,15 @@ export default function AnimatedNumber({
     return () => {
       cancelled = true;
     };
-  }, [value, duration]);
+  }, [value, duration, inView]);
 
   const formatted = group
     ? Math.round(display).toLocaleString("en-US")
     : display.toFixed(decimals);
 
-  return <span className={className}>{formatted}</span>;
+  return (
+    <span ref={spanRef} className={className}>
+      {formatted}
+    </span>
+  );
 }

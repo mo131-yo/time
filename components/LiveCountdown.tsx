@@ -21,7 +21,7 @@ export default function LiveCountdown({
       <Badge className="reveal mb-4">Үлдсэн амьдрал</Badge>
       <h2 className="reveal mb-12 max-w-2xl text-2xl font-black uppercase text-bone sm:text-4xl">
         Энэ мөч бүр эргэж{" "}
-        <span className="glow-ember text-ember">буцахгүй</span>
+        <span className="text-ember">буцахгүй</span>
       </h2>
 
       {b.expired ? (

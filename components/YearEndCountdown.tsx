@@ -3,8 +3,8 @@
 import { remainingBreakdown } from "@/lib/time";
 import { useLiveClock } from "./useLiveClock";
 import TimeBreakdownGrid from "./TimeBreakdownGrid";
+import SectionHeading from "./SectionHeading";
 import SectionIndex from "./SectionIndex";
-import Badge from "./Badge";
 
 /**
  * Профайлаас үл хамааран харагдах — өнөөдрөөс энэ жилийн төгсгөл хүртэл
@@ -24,29 +24,37 @@ export default function YearEndCountdown({
   const b = remainingBreakdown(yearEnd, now);
 
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
-      <div className="glow-blob glow-blob-1 -left-40 top-1/4 h-96 w-96 bg-ember/20" />
-      <div className="glow-blob glow-blob-2 -right-32 bottom-1/4 h-80 w-80 bg-ember-soft/15" />
+    <section
+      id="countdown"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 text-center"
+    >
+      <div className="breathe-glow -left-40 top-1/4 h-96 w-96 bg-ember/15" />
+      <div
+        className="breathe-glow -right-32 bottom-1/4 h-80 w-80 bg-ember-soft/10"
+        style={{ animationDelay: "2.5s" }}
+      />
 
       <SectionIndex n={sectionN} total={sectionTotal} className="absolute right-6 top-24" />
 
-      <div className="reveal relative">
-        <Badge className="mb-6">Бодит цаг · Календарь</Badge>
-
-        <h2 className="mb-12 max-w-2xl text-3xl font-black uppercase leading-tight tracking-tight text-bone sm:text-5xl">
-          {year} он дуусахад{" "}
-          <span className="glow-ember text-ember">ийм л хугацаа</span> үлдлээ
-        </h2>
+      <div className="relative">
+        <SectionHeading
+          line1={`${year} он`}
+          line2="Дуусахад"
+          badge="Бодит цаг · Календарь"
+          className="mb-12"
+        />
 
         {b.expired ? (
-          <p className="font-mono-nums text-2xl text-ember">
+          <p className="reveal font-mono-nums text-2xl text-ember">
             Шинэ жил боллоо!
           </p>
         ) : (
-          <TimeBreakdownGrid breakdown={b} size="lg" includeYears={false} />
+          <div className="reveal">
+            <TimeBreakdownGrid breakdown={b} size="lg" includeYears={false} />
+          </div>
         )}
 
-        <p className="mx-auto mt-14 max-w-md text-sm text-bone-dim">
+        <p className="reveal mx-auto mt-14 max-w-md text-sm text-bone-dim">
           Энэ тоо таны профайлаас үл хамааран, зөвхөн бодит календарийн цагаар
           л урсаж буурдаг.
         </p>

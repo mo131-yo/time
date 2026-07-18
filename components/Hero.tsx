@@ -2,12 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { useMagnetic } from "./useMagnetic";
+import HeroBackground from "./HeroBackground";
+import Marquee from "./Marquee";
 import SectionIndex from "./SectionIndex";
+import SplitChars from "./SplitChars";
 import Badge from "./Badge";
 
 export default function Hero({ onStart }: { onStart: () => void }) {
   const sectionRef = useRef<HTMLElement>(null);
   const btnRef = useMagnetic<HTMLButtonElement>();
+  const ghostRef = useMagnetic<HTMLButtonElement>();
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -15,6 +19,8 @@ export default function Hero({ onStart }: { onStart: () => void }) {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    // Preloader яг одоо ажиллаж байгаа үед л hero-ийн анимацийг хойшлуулна
+    const introRunning = document.documentElement.dataset.introActive === "1";
 
     let cancelled = false;
     let ctx: { revert: () => void } | null = null;
@@ -28,14 +34,24 @@ export default function Hero({ onStart }: { onStart: () => void }) {
 
       ctx = gsap.context(() => {
         if (prefersReduced) {
-          gsap.set([".hero-line", ".hero-item"], { opacity: 1, y: 0 });
+          gsap.set([".char", ".hero-item"], {
+            opacity: 1,
+            y: 0,
+            yPercent: 0,
+          });
           return;
         }
-        const tl = gsap.timeline({ delay: 0.15 });
+        const tl = gsap.timeline({ delay: introRunning ? 1.9 : 0.15 });
         tl.fromTo(
-          ".hero-line",
-          { yPercent: 110 },
-          { yPercent: 0, duration: 1, ease: "power4.out", stagger: 0.12 },
+          ".split-ready .char",
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: "power4.out",
+            stagger: 0.025,
+          },
         ).fromTo(
           ".hero-item",
           { opacity: 0, y: 24 },
@@ -60,47 +76,66 @@ export default function Hero({ onStart }: { onStart: () => void }) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pb-24 text-center"
     >
-      <div className="glow-blob glow-blob-1 -left-32 top-1/3 h-96 w-96 bg-ember/20" />
-      <div className="glow-blob glow-blob-2 -right-40 bottom-1/4 h-80 w-80 bg-ember-soft/15" />
+      <HeroBackground />
 
-      <SectionIndex n={1} total={3} className="absolute right-6 top-24" />
+      <SectionIndex n={1} total={3} className="absolute right-6 top-24 z-10" />
 
-      <Badge className="hero-item mb-6">Memento Mori</Badge>
+      <div className="relative z-10 flex flex-col items-center">
+        <Badge className="hero-item mb-8">Memento Mori · Амьдралын цаг</Badge>
 
-      <h1 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-bone sm:text-6xl md:text-7xl">
-        <span className="block overflow-hidden pb-1">
-          <span className="hero-line block">Чамд амьдрахад</span>
-        </span>
-        <span className="block overflow-hidden pb-1">
-          <span className="hero-line block">
-            <span className="glow-ember text-ember">хэдэн секунд</span>{" "}
-            үлдсэн бэ?
+        <h1 className="split-ready text-[clamp(2rem,8.5vw,6.5rem)] font-black uppercase leading-[1.05] tracking-tight text-bone">
+          <span className="block whitespace-nowrap">
+            <SplitChars text="Чамд амьдрахад" />
           </span>
-        </span>
-      </h1>
+          <span className="block whitespace-nowrap">
+            <SplitChars text="хэдэн секунд" />
+          </span>
+          <span className="block whitespace-nowrap text-ember">
+            <SplitChars text="үлдсэн бэ?" />
+          </span>
+        </h1>
 
-      <p className="hero-item mt-8 max-w-xl text-base leading-relaxed text-bone-dim sm:text-lg">
-        Хүйс, нас, улс үндэс, бие бялдар, дадал зуршлаа оруулаад нийт наслах
-        насаа тооцоолж, үлдсэн амьдралаа секунд тутам буурах цаг хэлбэрээр
-        хараарай.
-      </p>
+        <p className="hero-item font-mono-nums mt-8 max-w-xl text-sm leading-relaxed text-bone-dim sm:text-base">
+          Хүйс, нас, улс үндэс, бие бялдар, дадал зуршлаа оруулаад нийт наслах
+          насаа тооцоолж, үлдсэн амьдралаа секунд тутам буурах цаг хэлбэрээр
+          хараарай.
+        </p>
 
-      <button
-        ref={btnRef}
-        onClick={onStart}
-        data-cursor-hover
-        className="hero-item group btn-primary mt-12"
-      >
-        Тооцоолж эхлэх
-        <span className="inline-block transition-transform group-hover:translate-y-0.5">
-          ↓
-        </span>
-      </button>
+        <div className="hero-item mt-12 flex flex-col items-center gap-4 sm:flex-row">
+          <button
+            ref={btnRef}
+            onClick={onStart}
+            data-cursor-hover
+            className="btn-primary"
+          >
+            Тооцоолж эхлэх
+          </button>
+          <button
+            ref={ghostRef}
+            onClick={onStart}
+            data-cursor-hover
+            className="btn-outline group"
+          >
+            Асуулт бөглөх
+            <span className="inline-block transition-transform group-hover:translate-x-1">
+              →
+            </span>
+          </button>
+        </div>
 
-      <div className="hero-item absolute bottom-10 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.3em] text-bone-dim">
-        <span className="inline-block animate-pulse">доош гүйлгэ</span>
+        <div className="hero-item mt-14 flex flex-col items-center gap-3">
+          <span className="font-mono-nums text-[10px] uppercase tracking-[0.35em] text-bone-dim">
+            Доош гүйлгэ
+          </span>
+          <span className="block h-10 w-px bg-linear-to-b from-ember to-transparent" />
+        </div>
+      </div>
+
+      {/* Доод ticker тууз */}
+      <div className="hero-item absolute inset-x-0 bottom-0">
+        <Marquee />
       </div>
     </section>
   );

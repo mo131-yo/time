@@ -3,16 +3,15 @@
 import { useState } from "react";
 import { COUNTRIES, DEFAULT_COUNTRY_CODE, Sex } from "@/lib/countries";
 import { LifeProfile, SmokingStatus } from "@/lib/lifeExpectancy";
-import { useMagnetic } from "./useMagnetic";
 import SectionIndex from "./SectionIndex";
 
 const field =
-  "w-full rounded-lg border border-ash bg-ink-2 px-4 py-3 text-bone outline-none transition-colors focus:border-ember";
+  "w-full border border-ash bg-ink-2 px-4 py-3 font-mono-nums text-bone outline-none transition-colors focus:border-ember";
 const labelCls =
-  "mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-bone-dim";
+  "mb-2 block font-mono-nums text-xs font-medium uppercase tracking-[0.2em] text-bone-dim";
 
 function toggleBtnCls(active: boolean) {
-  return `rounded-lg border px-4 py-3 text-sm transition-colors ${
+  return `border px-4 py-3 text-sm uppercase tracking-wide transition-colors ${
     active
       ? "border-ember bg-ember/10 text-ember"
       : "border-ash bg-ink-2 text-bone-dim hover:border-bone-dim"
@@ -110,8 +109,6 @@ export default function ProfileForm({
     });
   }
 
-  const submitRef = useMagnetic<HTMLButtonElement>();
-
   return (
     <section
       id="form"
@@ -119,10 +116,11 @@ export default function ProfileForm({
     >
       <SectionIndex n={3} total={3} className="absolute right-6 top-24" />
       <div className="reveal w-full max-w-xl">
-        <h2 className="mb-2 text-3xl font-black tracking-tight text-bone">
-          Өөрийнхөө тухай хэлээч
+        <h2 className="mb-2 text-3xl font-black uppercase tracking-tight text-bone sm:text-4xl">
+          Өөрийнхөө тухай{" "}
+          <span className="text-outline">хэлээч</span>
         </h2>
-        <p className="mb-10 text-sm text-bone-dim">
+        <p className="mb-10 font-mono-nums text-sm text-bone-dim">
           Энэ мэдээллийг зөвхөн таны төхөөрөмж дээр (localStorage) хадгална.
         </p>
 
@@ -333,7 +331,6 @@ export default function ProfileForm({
           {error && <p className="text-sm text-ember">{error}</p>}
 
           <button
-            ref={submitRef}
             type="submit"
             data-cursor-hover
             className="btn-primary w-full"

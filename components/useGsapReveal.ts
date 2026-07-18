@@ -57,6 +57,36 @@ export function useGsapReveal<T extends HTMLElement>(
             },
           );
         });
+
+        // k3studios маягийн үсэг-үсгээр орж ирэх секцийн гарчгууд
+        const charContainers = gsap.utils.toArray<HTMLElement>(
+          ".reveal-chars",
+          el,
+        );
+        charContainers.forEach((container) => {
+          const chars = container.querySelectorAll<HTMLElement>(".char");
+          if (!chars.length) return;
+          if (prefersReduced) {
+            gsap.set(chars, { opacity: 1, y: 0 });
+            return;
+          }
+          gsap.fromTo(
+            chars,
+            { opacity: 0.3, y: "50%" },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              stagger: 0.02,
+              scrollTrigger: {
+                trigger: container,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        });
         ScrollTrigger.refresh();
       }, el);
     })();

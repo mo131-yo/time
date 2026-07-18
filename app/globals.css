@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
-/* ── Dark cinematic (memento mori) тема ── */
+/* ── k3studios маягийн dark тема (memento mori) ── */
 :root {
-  --ink: #050505;        /* гүн хар суурь */
-  --ink-2: #0b0b0d;      /* картын суурь */
-  --bone: #ece7dd;       /* яс/цайвар текст */
-  --bone-dim: #8a857c;   /* бүдэг текст */
-  --ember: #e0603a;      /* улаан-улбар accent (амьдралын гал) */
-  --ember-soft: #f0a878;
-  --ash: #2a2a2e;        /* зураас/хүрээ */
+  --ink: #0a0a0a;        /* гүн хар суурь */
+  --ink-2: #111111;      /* картын суурь */
+  --bone: #f0ece4;       /* яс/цайвар текст */
+  --bone-dim: #8f8a80;   /* бүдэг текст */
+  --ember: #ed5724;      /* улбар шар accent (амьдралын гал) */
+  --ember-soft: #ff8a5c;
+  --ash: #262626;        /* зураас/хүрээ */
 }
 
 @theme inline {
@@ -34,23 +34,14 @@ body {
   overflow-x: hidden;
 }
 
-/* Vignette + нарийн grain overlay бүх хуудсанд */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  background:
-    radial-gradient(120% 120% at 50% 30%, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
-}
+/* Нарийн grain overlay бүх хуудсанд (k3 хавтгай хар тул vignette байхгүй) */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 51;
-  opacity: 0.045;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -63,11 +54,11 @@ body::after {
   }
   .glow-ember {
     text-shadow:
-      0 0 18px rgba(224, 96, 58, 0.55),
-      0 0 60px rgba(224, 96, 58, 0.25);
+      0 0 18px rgba(237, 87, 36, 0.55),
+      0 0 60px rgba(237, 87, 36, 0.25);
   }
   .glow-bone {
-    text-shadow: 0 0 30px rgba(236, 231, 221, 0.25);
+    text-shadow: 0 0 30px rgba(240, 236, 228, 0.25);
   }
   /* Scroll reveal-ийн эхний нуугдсан төлөв (JS ажиллахгүй үед ч харагдана) */
   .reveal {
@@ -83,6 +74,19 @@ body::after {
   }
   .js .hero-item {
     opacity: 0;
+  }
+
+  /* Үсэг-үсгээр орж ирэх гарчгийн эхний төлөв (JS-гүй үед текст шууд харагдана) */
+  .char {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+  .js .split-ready .char {
+    opacity: 0;
+  }
+  .js .reveal-chars .char {
+    opacity: 0.3;
+    transform: translateY(50%);
   }
 
   /* Custom cursor идэвхтэй үед (зөвхөн desktop, pointer: fine) анхны cursor-г нуух */
@@ -116,33 +120,102 @@ body::after {
     animation: float-b 22s ease-in-out infinite alternate;
   }
 
+  /* ── k3studios hero дэвсгэрийн иж бүрдэл ── */
+
+  /* Босоо 1px grid шугам */
+  .hero-grid-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: color-mix(in srgb, var(--bone) 6%, transparent);
+  }
+
+  /* Grid шугамын дагуу гүйх blur улбар гэрэл */
+  .grid-pulse {
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 120px;
+    filter: blur(2px);
+    opacity: 0;
+    background: linear-gradient(to bottom, transparent, var(--ember), transparent);
+    animation: grid-pulse 5s ease-in-out infinite;
+  }
+
+  /* Дээрээс доош гүйх хөндлөн scan шугам */
+  .scan-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    opacity: 0;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(237, 87, 36, 0.25),
+      transparent
+    );
+    animation: scan 10s linear infinite 1.5s;
+  }
+
+  /* Доош унах жижиг particle цэгүүд */
+  .particle {
+    position: absolute;
+    top: -10px;
+    border-radius: 9999px;
+    background: rgba(237, 87, 36, 0.25);
+    opacity: 0;
+    animation: particle-fall linear infinite;
+  }
+
+  /* Амьсгалах radial улбар glow */
+  .breathe-glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    filter: blur(90px);
+    animation: breathe 7s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  /* Удаан эргэдэг чимэглэлийн SVG */
+  .rotate-slow {
+    animation: spin-slow 40s linear infinite;
+  }
+  .rotate-slow-reverse {
+    animation: spin-slow 40s linear infinite reverse;
+  }
+
   /* Зөвхөн хүрээтэй, дотор нь хоосон (stroke-only) текст — k3studios-ийн "WORK" маягийн heading */
   .text-outline {
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--bone);
+    -webkit-text-stroke: 1px var(--bone);
     paint-order: stroke fill;
   }
 
-  /* Үндсэн CTA товч — тэгш өнцөгт ойрхон, ембер дэвсгэртэй, ALL CAPS */
+  /* Үндсэн CTA товч — хурц булантай, ембер дэвсгэртэй, mono ALL CAPS */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0;
     background: var(--ember);
     color: var(--ink);
     padding: 1rem 2rem;
-    font-size: 0.875rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.8125rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     transition:
-      box-shadow 0.3s ease,
-      opacity 0.3s ease;
+      background 0.3s ease,
+      color 0.3s ease;
   }
   .btn-primary:hover {
-    box-shadow: 0 0 40px -6px rgba(224, 96, 58, 0.7);
+    background: var(--bone);
+    color: var(--ink);
   }
 
   /* Хоёрдогч CTA товч — хүрээтэй, hover дээр ember болно */
@@ -151,15 +224,16 @@ body::after {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0;
     border: 1px solid var(--ash);
     background: color-mix(in srgb, var(--ink-2) 60%, transparent);
     color: var(--bone);
     padding: 1rem 2rem;
-    font-size: 0.875rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     transition:
       border-color 0.3s ease,
       color 0.3s ease;
@@ -197,6 +271,102 @@ body::after {
   }
 }
 
+@keyframes grid-pulse {
+  0% {
+    top: -15%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes scan {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.4;
+  }
+  95% {
+    opacity: 0.4;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes particle-fall {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-15px, 50vh) scale(1.1);
+    opacity: 0.35;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(10px, 100vh) scale(0.7);
+    opacity: 0;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Хөдөлгөөн багасгах тохиргоотой хэрэглэгчдэд бүх чимэглэлийн CSS анимацийг унтраана */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .glow-blob-1,
+  .glow-blob-2,
+  .grid-pulse,
+  .scan-line,
+  .particle,
+  .breathe-glow,
+  .rotate-slow,
+  .rotate-slow-reverse {
+    animation: none !important;
+  }
+  .grid-pulse,
+  .scan-line,
+  .particle {
+    display: none;
+  }
+}
+
 /* Firefox/webkit scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -206,5 +376,5 @@ body::after {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--ash);
-  border-radius: 6px;
+  border-radius: 0;
 }
