@@ -41,7 +41,7 @@ export default function Hero({ onStart }: { onStart: () => void }) {
           });
           return;
         }
-        const tl = gsap.timeline({ delay: introRunning ? 1.9 : 0.15 });
+        const tl = gsap.timeline({ delay: introRunning ? 1.6 : 0.15 });
         tl.fromTo(
           ".split-ready .char",
           { y: 40, opacity: 0 },
@@ -76,16 +76,16 @@ export default function Hero({ onStart }: { onStart: () => void }) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pb-24 text-center"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pb-28 pt-28 text-center"
     >
       <HeroBackground />
 
       <SectionIndex n={1} total={3} className="absolute right-6 top-24 z-10" />
 
       <div className="relative z-10 flex flex-col items-center">
-        <Badge className="hero-item mb-8">Memento Mori · Амьдралын цаг</Badge>
+        <Badge className="hero-item mb-6">Memento Mori · Амьдралын цаг</Badge>
 
-        <h1 className="split-ready text-[clamp(2rem,8.5vw,6.5rem)] font-black uppercase leading-[1.05] tracking-tight text-bone">
+        <h1 className="split-ready text-[clamp(1.9rem,6vw,4.5rem)] font-black uppercase leading-[1.05] tracking-tight text-bone">
           <span className="block whitespace-nowrap">
             <SplitChars text="Чамд амьдрахад" />
           </span>
@@ -97,13 +97,13 @@ export default function Hero({ onStart }: { onStart: () => void }) {
           </span>
         </h1>
 
-        <p className="hero-item font-mono-nums mt-8 max-w-xl text-sm leading-relaxed text-bone-dim sm:text-base">
+        <p className="hero-item font-mono-nums mt-6 max-w-xl text-sm leading-relaxed text-bone-dim sm:text-base">
           Хүйс, нас, улс үндэс, бие бялдар, дадал зуршлаа оруулаад нийт наслах
           насаа тооцоолж, үлдсэн амьдралаа секунд тутам буурах цаг хэлбэрээр
           хараарай.
         </p>
 
-        <div className="hero-item mt-12 flex flex-col items-center gap-4 sm:flex-row">
+        <div className="hero-item mt-8 flex flex-col items-center gap-4 sm:mt-10 sm:flex-row">
           <button
             ref={btnRef}
             onClick={onStart}
@@ -125,7 +125,7 @@ export default function Hero({ onStart }: { onStart: () => void }) {
           </button>
         </div>
 
-        <div className="hero-item mt-14 flex flex-col items-center gap-3">
+        <div className="hero-item mt-10 flex flex-col items-center gap-3">
           <span className="font-mono-nums text-[10px] uppercase tracking-[0.35em] text-bone-dim">
             Доош гүйлгэ
           </span>

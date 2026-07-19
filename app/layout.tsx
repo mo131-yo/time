@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Cursor from "@/components/Cursor";
-import GlowOrb from "@/components/GlowOrb";
+import GlobalBackground from "@/components/GlobalBackground";
 import Navbar from "@/components/Navbar";
 import Preloader from "@/components/Preloader";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
@@ -59,9 +59,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-ink text-bone">
         <RegisterServiceWorker />
+        <GlobalBackground />
         <Preloader />
         <Cursor />
-        <GlowOrb />
         <Navbar />
         {children}
       </body>

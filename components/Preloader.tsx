@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * k3studios-ийн preloader + 3 самбарт page transition-ы эхлэлийн reveal:
- * Фаза A — лого, progress bar, % тоолуур (~1.4s симуляци);
- * Фаза B — 3 босоо самбар (ember/ink-2/ember) доош гулсаж хуудсыг ил гаргана.
+ * Сайтын theme-тэй нийцсэн preloader: бүтэн дэлгэцийн хар (bg-ink) overlay
+ * дээр лого + progress bar + % тоолуур (~1.4s симуляци), дараа нь overlay
+ * бүхэлдээ зөөлөн fade out хийж арилна.
  *
  * Хамгаалалт: reduced-motion болон нэг session дотор давтан зочлоход огт
  * харагдахгүй; GSAP амжилтгүй болсон ч fail-safe timeout-оор заавал арилна.
@@ -60,10 +60,6 @@ export default function Preloader() {
 
         const fill = root.querySelector<HTMLElement>("[data-preloader-fill]");
         const pct = root.querySelector<HTMLElement>("[data-preloader-pct]");
-        const inner = root.querySelector<HTMLElement>("[data-preloader-inner]");
-        const panels = root.querySelectorAll<HTMLElement>(
-          "[data-preloader-panel]",
-        );
 
         const counter = { n: 0 };
         const tl = gsap.timeline({ onComplete: finish });
@@ -77,18 +73,7 @@ export default function Preloader() {
             if (fill) fill.style.width = `${v}%`;
             if (pct) pct.textContent = String(v);
           },
-        })
-          .to(inner, { opacity: 0, duration: 0.25, ease: "power1.out" })
-          .to(
-            panels,
-            {
-              yPercent: 100,
-              duration: 0.6,
-              ease: "power4.inOut",
-              stagger: 0.08,
-            },
-            "-=0.05",
-          );
+        }).to(root, { opacity: 0, duration: 0.5, ease: "power1.out" });
       } catch {
         finish();
       }
@@ -104,39 +89,23 @@ export default function Preloader() {
   if (done || !active) return null;
 
   return (
-    <div ref={rootRef} aria-hidden className="fixed inset-0 z-90">
-      {/* 3 босоо самбар */}
-      <div
-        data-preloader-panel
-        className="absolute inset-y-0 left-0 w-[33.4%] bg-ember"
-      />
-      <div
-        data-preloader-panel
-        className="absolute inset-y-0 left-[33.3%] w-[33.4%] bg-ink-2"
-      />
-      <div
-        data-preloader-panel
-        className="absolute inset-y-0 left-[66.6%] w-[33.4%] bg-ember"
-      />
-
-      {/* Лого + progress */}
-      <div
-        data-preloader-inner
-        className="absolute inset-0 flex flex-col items-center justify-center gap-5"
-      >
-        <span className="font-mono-nums text-sm uppercase tracking-[0.4em] text-bone">
-          Memento Mori
-        </span>
-        <div className="h-px w-48 overflow-hidden bg-bone/20">
-          <div data-preloader-fill className="h-full w-0 bg-ember" />
-        </div>
-        <span
-          data-preloader-pct
-          className="font-mono-nums text-xs tracking-[0.2em] text-bone-dim"
-        >
-          0
-        </span>
+    <div
+      ref={rootRef}
+      aria-hidden
+      className="fixed inset-0 z-90 flex flex-col items-center justify-center gap-5 bg-ink"
+    >
+      <span className="font-mono-nums text-sm uppercase tracking-[0.4em] text-bone">
+        Memento Mori
+      </span>
+      <div className="h-px w-48 overflow-hidden bg-ash">
+        <div data-preloader-fill className="h-full w-0 bg-ember" />
       </div>
+      <span
+        data-preloader-pct
+        className="font-mono-nums text-xs tracking-[0.2em] text-bone-dim"
+      >
+        0
+      </span>
     </div>
   );
 }

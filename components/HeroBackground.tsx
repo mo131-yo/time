@@ -1,19 +1,12 @@
 /**
- * k3studios-ийн hero дэвсгэрийн иж бүрдэл: босоо grid шугам + гүйх гэрлийн
- * pulse, scan шугам, доош унах particle, амьсгалах glow, булангийн +
- * тэмдгүүд, эргэдэг чимэглэлийн SVG. Бүгд цэвэр CSS анимаци.
+ * Hero-ийн нэмэлт дэвсгэрийн чимэглэл: scan шугам, доош унах particle,
+ * булангийн + тэмдгүүд, эргэдэг чимэглэлийн SVG. Grid шугам болон glow нь
+ * GlobalBackground-д бүх хуудсаар харагддаг тул энд давхардуулахгүй.
+ * Бүгд цэвэр CSS анимаци.
  *
  * Particle-ийн утгууд hydration mismatch-ээс сэргийлж урьдчилан тогтмол
  * (render дотор Math.random() ашиглахгүй).
  */
-
-const GRID_LINES = [
-  { left: "10%", pulseDelay: "0.5s", pulseDuration: "5s" },
-  { left: "30%", pulseDelay: "2s", pulseDuration: "6s" },
-  { left: "50%", pulseDelay: "1s", pulseDuration: "4.5s" },
-  { left: "70%", pulseDelay: "3s", pulseDuration: "5.5s" },
-  { left: "90%", pulseDelay: "1.5s", pulseDuration: "5s" },
-];
 
 const PARTICLES = [
   { size: 3, left: "17%", delay: "0s", duration: "9.9s" },
@@ -33,19 +26,6 @@ const PARTICLES = [
 export default function HeroBackground() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Grid шугамууд + гүйх гэрлийн pulse */}
-      {GRID_LINES.map((line) => (
-        <div key={line.left} className="hero-grid-line" style={{ left: line.left }}>
-          <div
-            className="grid-pulse"
-            style={{
-              animationDelay: line.pulseDelay,
-              animationDuration: line.pulseDuration,
-            }}
-          />
-        </div>
-      ))}
-
       {/* Scan шугам */}
       <div className="scan-line" />
 
@@ -63,13 +43,6 @@ export default function HeroBackground() {
           }}
         />
       ))}
-
-      {/* Амьсгалах glow-ууд */}
-      <div className="breathe-glow -left-32 top-1/4 h-96 w-96 bg-ember/15" />
-      <div
-        className="breathe-glow -right-40 bottom-1/4 h-80 w-80 bg-ember-soft/10"
-        style={{ animationDelay: "2.5s" }}
-      />
 
       {/* Булангийн + тэмдгүүд */}
       <span className="font-mono-nums absolute left-6 top-24 text-bone-dim/40">+</span>
