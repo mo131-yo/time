@@ -49,10 +49,6 @@ export default function YearEndCountdown({
           </div>
         )}
 
-        <p className="reveal mx-auto mt-14 max-w-md text-sm text-bone-dim">
-          Энэ тоо таны профайлаас үл хамааран, зөвхөн бодит календарийн цагаар
-          л урсаж буурдаг.
-        </p>
       </div>
     </section>
   );

@@ -120,9 +120,6 @@ export default function ProfileForm({
           Өөрийнхөө тухай{" "}
           <span className="text-outline">хэлээч</span>
         </h2>
-        <p className="mb-10 font-mono-nums text-sm text-bone-dim">
-          Энэ мэдээллийг зөвхөн таны төхөөрөмж дээр (localStorage) хадгална.
-        </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
