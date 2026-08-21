@@ -2,11 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Контейнер доторх `.reveal` элементүүдийг scroll хийхэд GSAP ScrollTrigger-ээр
- * дэлбэрүүлэн гаргана. GSAP зөвхөн client дээр — dynamic import ашиглана.
- * `deps` өөрчлөгдөх бүрт (жишээ нь үзэгдэл солигдоход) дахин холбоно.
- */
 export function useGsapReveal<T extends HTMLElement>(
   deps: unknown[] = [],
 ): React.RefObject<T | null> {
@@ -58,7 +53,6 @@ export function useGsapReveal<T extends HTMLElement>(
           );
         });
 
-        // k3studios маягийн үсэг-үсгээр орж ирэх секцийн гарчгууд
         const charContainers = gsap.utils.toArray<HTMLElement>(
           ".reveal-chars",
           el,

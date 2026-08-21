@@ -1,9 +1,3 @@
-/**
- * Бүх хуудсыг хамарсан fixed дэвсгэр: 5 босоо grid шугам + тус бүр дээр гүйх
- * гэрлийн pulse, маш бүдэг амьсгалах glow. Scroll хийхэд ч бүх хэсэгт
- * (форм, үр дүн г.м) ижил k3studios дэвсгэр харагдана. Цэвэр CSS анимаци.
- */
-
 const GRID_LINES = [
   { left: "10%", pulseDelay: "0.5s", pulseDuration: "5s" },
   { left: "30%", pulseDelay: "2s", pulseDuration: "6s" },
@@ -27,7 +21,6 @@ export default function GlobalBackground() {
         </div>
       ))}
 
-      {/* Маш бүдэг амьсгалах glow-ууд */}
       <div className="breathe-glow -left-32 top-1/4 h-96 w-96 bg-ember/10" />
       <div
         className="breathe-glow -right-40 bottom-1/4 h-80 w-80 bg-ember-soft/5"

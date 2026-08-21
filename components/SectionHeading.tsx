@@ -1,11 +1,6 @@
 import Badge from "./Badge";
 import SplitChars from "./SplitChars";
 
-/**
- * k3studios-ийн секцийн 2 мөрт аварга гарчиг: эхний мөр цул, хоёр дахь мөр
- * stroke-only (.text-outline). `.reveal-chars` контейнерийг useGsapReveal
- * scroll дээр үсэг-үсгээр амилуулна.
- */
 export default function SectionHeading({
   line1,
   line2,

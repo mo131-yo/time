@@ -33,12 +33,10 @@ function NavLink({
   );
 }
 
-/** k3studios-ийн маягийн fixed navbar — лого зүүн, mono линкүүд гол, CTA баруун. */
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const ctaRef = useScramble<HTMLSpanElement>();
 
-  // Mobile цэс нээлттэй үед body scroll-ыг түгжинэ
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
@@ -63,7 +61,6 @@ export default function Navbar() {
             Time
           </a>
 
-          {/* Гол линкүүд — зөвхөн desktop */}
           <nav className="hidden items-center gap-8 md:flex">
             {LINKS.map((l) => (
               <NavLink key={l.href} label={l.label} href={l.href} />
@@ -83,7 +80,6 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Mobile hamburger */}
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Цэс хаах" : "Цэс нээх"}
@@ -104,7 +100,6 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile fullscreen цэс */}
       <div
         className={`fixed inset-0 z-30 flex flex-col items-center justify-center gap-2 bg-ink/95 backdrop-blur-xl transition-opacity duration-300 md:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"

@@ -19,7 +19,6 @@ export default function Hero({ onStart }: { onStart: () => void }) {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    // Preloader яг одоо ажиллаж байгаа үед л hero-ийн анимацийг хойшлуулна
     const introRunning = document.documentElement.dataset.introActive === "1";
 
     let cancelled = false;
@@ -133,7 +132,6 @@ export default function Hero({ onStart }: { onStart: () => void }) {
         </div>
       </div>
 
-      {/* Доод ticker тууз */}
       <div className="hero-item absolute inset-x-0 bottom-0">
         <Marquee />
       </div>

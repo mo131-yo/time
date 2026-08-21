@@ -1,4 +1,3 @@
-/** k3studios-ийн "DIGITAL AGENCY · DUBAI, UAE" маягийн bordered pill eyebrow badge. */
 export default function Badge({
   children,
   className = "",

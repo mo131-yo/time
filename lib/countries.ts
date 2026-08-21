@@ -1,20 +1,12 @@
-// Төрөх үеийн дундаж наслалт (life expectancy at birth), хүйсээр.
-// Эх сурвалж: UN World Population Prospects 2024 revision (population.un.org/wpp) —
-// одоогийн хамгийн сүүлийн албан ёсны багц (2026 revision хараахан гараагүй).
-// Тоонууд нь хамгийн сүүлийн үеийн тооцоо (2023–2025 medium variant).
-
 export type Sex = "male" | "female";
 
 export interface CountryLifeExpectancy {
-  /** ISO-ish түлхүүр */
   code: string;
-  /** Монгол нэр */
   name: string;
   male: number;
   female: number;
 }
 
-// Цагаан толгойн дарааллаар биш — Монголыг эхэнд, дараа нь бүсээр.
 export const COUNTRIES: CountryLifeExpectancy[] = [
   { code: "MN", name: "Монгол", male: 67.2, female: 76.4 },
   { code: "JP", name: "Япон", male: 81.7, female: 87.7 },

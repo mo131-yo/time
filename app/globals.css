@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
-/* ── k3studios маягийн dark тема (memento mori) ── */
 :root {
-  --ink: #0a0a0a;        /* гүн хар суурь */
-  --ink-2: #111111;      /* картын суурь */
-  --bone: #f0ece4;       /* яс/цайвар текст */
-  --bone-dim: #8f8a80;   /* бүдэг текст */
-  --ember: #ed5724;      /* улбар шар accent (амьдралын гал) */
+  --ink: #0a0a0a;       
+  --ink-2: #111111;      
+  --bone: #f0ece4;      
+  --bone-dim: #8f8a80;  
+  --ember: #ed5724;     
   --ember-soft: #ff8a5c;
-  --ash: #262626;        /* зураас/хүрээ */
+  --ash: #262626;     
 }
 
 @theme inline {
@@ -34,7 +33,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Нарийн grain overlay бүх хуудсанд (k3 хавтгай хар тул vignette байхгүй) */
 body::after {
   content: "";
   position: fixed;
@@ -45,7 +43,6 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ── Туслах utility классууд ── */
 @layer utilities {
   .font-mono-nums {
     font-family: var(--font-geist-mono), ui-monospace, monospace;
@@ -60,7 +57,6 @@ body::after {
   .glow-bone {
     text-shadow: 0 0 30px rgba(240, 236, 228, 0.25);
   }
-  /* Scroll reveal-ийн эхний нуугдсан төлөв (JS ажиллахгүй үед ч харагдана) */
   .reveal {
     opacity: 1;
   }
@@ -68,7 +64,6 @@ body::after {
     opacity: 0;
   }
 
-  /* Hero-ийн орох үеийн staggered animation-ий эхний төлөв */
   .hero-item {
     opacity: 1;
   }
@@ -76,7 +71,6 @@ body::after {
     opacity: 0;
   }
 
-  /* Үсэг-үсгээр орж ирэх гарчгийн эхний төлөв (JS-гүй үед текст шууд харагдана) */
   .char {
     display: inline-block;
     will-change: transform, opacity;
@@ -89,13 +83,11 @@ body::after {
     transform: translateY(50%);
   }
 
-  /* Custom cursor идэвхтэй үед (зөвхөн desktop, pointer: fine) анхны cursor-г нуух */
   .cursor-none-active,
   .cursor-none-active * {
     cursor: none !important;
   }
 
-  /* Хязгааргүй гүйдэг marquee тууз */
   .marquee-track {
     display: flex;
     width: max-content;
@@ -105,7 +97,6 @@ body::after {
     animation-play-state: paused;
   }
 
-  /* Аажмаар шилждэг дэвсгэрийн glow blob */
   .glow-blob {
     position: absolute;
     pointer-events: none;
@@ -120,9 +111,6 @@ body::after {
     animation: float-b 22s ease-in-out infinite alternate;
   }
 
-  /* ── k3studios hero дэвсгэрийн иж бүрдэл ── */
-
-  /* Босоо 1px grid шугам */
   .hero-grid-line {
     position: absolute;
     top: 0;
@@ -131,7 +119,6 @@ body::after {
     background: color-mix(in srgb, var(--bone) 6%, transparent);
   }
 
-  /* Grid шугамын дагуу гүйх blur улбар гэрэл */
   .grid-pulse {
     position: absolute;
     left: 0;
@@ -143,7 +130,6 @@ body::after {
     animation: grid-pulse 5s ease-in-out infinite;
   }
 
-  /* Дээрээс доош гүйх хөндлөн scan шугам */
   .scan-line {
     position: absolute;
     left: 0;
@@ -159,7 +145,6 @@ body::after {
     animation: scan 10s linear infinite 1.5s;
   }
 
-  /* Доош унах жижиг particle цэгүүд */
   .particle {
     position: absolute;
     top: -10px;
@@ -169,7 +154,6 @@ body::after {
     animation: particle-fall linear infinite;
   }
 
-  /* Амьсгалах radial улбар glow */
   .breathe-glow {
     position: absolute;
     pointer-events: none;
@@ -179,7 +163,6 @@ body::after {
     will-change: transform, opacity;
   }
 
-  /* Удаан эргэдэг чимэглэлийн SVG */
   .rotate-slow {
     animation: spin-slow 40s linear infinite;
   }
@@ -194,7 +177,6 @@ body::after {
     paint-order: stroke fill;
   }
 
-  /* Үндсэн CTA товч — хурц булантай, ембер дэвсгэртэй, mono ALL CAPS */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -218,7 +200,6 @@ body::after {
     color: var(--ink);
   }
 
-  /* Хоёрдогч CTA товч — хүрээтэй, hover дээр ember болно */
   .btn-outline {
     display: inline-flex;
     align-items: center;
@@ -347,7 +328,6 @@ body::after {
   }
 }
 
-/* Хөдөлгөөн багасгах тохиргоотой хэрэглэгчдэд бүх чимэглэлийн CSS анимацийг унтраана */
 @media (prefers-reduced-motion: reduce) {
   .marquee-track,
   .glow-blob-1,
@@ -367,7 +347,6 @@ body::after {
   }
 }
 
-/* Firefox/webkit scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }

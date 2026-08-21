@@ -44,7 +44,6 @@ export default function PercentUsed({
           Чиний амьдралын {used.toFixed(4)}% өнгөрч, {left.toFixed(4)}% үлдсэн байна.
         </p>
 
-        {/* Progress bar — амьд */}
         <div className="reveal relative h-6 w-full overflow-hidden border border-ash bg-ink-2">
           <div
             className="absolute inset-y-0 left-0 bg-linear-to-r from-ember to-ember-soft"
@@ -57,7 +56,6 @@ export default function PercentUsed({
           <span>Нас барах</span>
         </div>
 
-        {/* Зарцуулсан хугацааны нарийвчилсан задаргаа — бодит цагаар урсана */}
         <div className="reveal mb-8 flex justify-center">
           <Badge>Зарцуулсан хугацааны задаргаа</Badge>
         </div>

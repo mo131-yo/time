@@ -1,5 +1,3 @@
-// Хугацааны цэвэр тооцооллын функцууд. Бүх амьд утга бодит Date.now()-оос гарна.
-
 const MS = {
   second: 1000,
   minute: 60 * 1000,
@@ -10,17 +8,15 @@ const MS = {
   month: (365.25 / 12) * 24 * 60 * 60 * 1000,
 };
 
-/** Нэг жилийг нэгжүүд рүү хөрвүүлсэн тогтмол лавлагаа (365.25 өдөр). */
 export function yearInUnits() {
   return {
     days: 365.25,
-    hours: 8766, // 365.25 * 24
-    minutes: 525960, // 365.25 * 1440
-    seconds: 31557600, // 365.25 * 86400
+    hours: 8766, 
+    minutes: 525960, 
+    seconds: 31557600, 
   };
 }
 
-/** Нийт наслах хугацаанаас хэдэн хувийг зарцуулсныг (0–100) буцаана. */
 export function percentUsed(
   birthDate: string,
   deathDate: string,
@@ -40,16 +36,11 @@ export interface Breakdown {
   days: number;
   hours: number;
   minutes: number;
-  /** Аравтын бутархайтай (жишээ нь 36.4) — секунд нь бодит цагаар тасралтгүй урсдаг мэдрэмж өгнө. */
   seconds: number;
   totalSeconds: number;
   expired: boolean;
 }
 
-/**
- * `ms`-ийг жил/сар/өдөр/цаг/мин/сек болгон задална (nested — нийлбэр нь яг `ms`).
- * `remainingBreakdown` болон `elapsedBreakdown` хоёулаа үүгээр дамждаг дундын логик.
- */
 function breakdownBetween(ms: number): Breakdown {
   if (ms <= 0) {
     return {
@@ -81,7 +72,6 @@ function breakdownBetween(ms: number): Breakdown {
   return { years, months, days, hours, minutes, seconds, totalSeconds, expired: false };
 }
 
-/** Үлдсэн хугацааг жил/сар/өдөр/цаг/мин/сек болгон задална. */
 export function remainingBreakdown(
   deathDate: string,
   now: number = Date.now(),
@@ -90,7 +80,6 @@ export function remainingBreakdown(
   return breakdownBetween(death - now);
 }
 
-/** Төрснөөс хойш өнгөрсөн хугацааг жил/сар/өдөр/цаг/мин/сек болгон задална. */
 export function elapsedBreakdown(
   birthDate: string,
   now: number = Date.now(),

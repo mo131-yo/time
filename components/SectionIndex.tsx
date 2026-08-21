@@ -2,7 +2,6 @@ function pad(n: number): string {
   return String(n).padStart(2, "0");
 }
 
-/** k3studios-ийн 01/02/03 маягийн жижиг дугаарлалт — хэсэг бүрийн буланд. */
 export default function SectionIndex({
   n,
   total,

@@ -1,13 +1,3 @@
-/**
- * Hero-ийн нэмэлт дэвсгэрийн чимэглэл: scan шугам, доош унах particle,
- * булангийн + тэмдгүүд, эргэдэг чимэглэлийн SVG. Grid шугам болон glow нь
- * GlobalBackground-д бүх хуудсаар харагддаг тул энд давхардуулахгүй.
- * Бүгд цэвэр CSS анимаци.
- *
- * Particle-ийн утгууд hydration mismatch-ээс сэргийлж урьдчилан тогтмол
- * (render дотор Math.random() ашиглахгүй).
- */
-
 const PARTICLES = [
   { size: 3, left: "17%", delay: "0s", duration: "9.9s" },
   { size: 2, left: "32%", delay: "0.9s", duration: "12s" },
@@ -26,10 +16,8 @@ const PARTICLES = [
 export default function HeroBackground() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Scan шугам */}
       <div className="scan-line" />
 
-      {/* Particle цэгүүд */}
       {PARTICLES.map((p, i) => (
         <div
           key={i}
@@ -44,13 +32,11 @@ export default function HeroBackground() {
         />
       ))}
 
-      {/* Булангийн + тэмдгүүд */}
       <span className="font-mono-nums absolute left-6 top-24 text-bone-dim/40">+</span>
       <span className="font-mono-nums absolute right-6 top-24 text-bone-dim/40">+</span>
       <span className="font-mono-nums absolute bottom-24 left-6 text-bone-dim/40">+</span>
       <span className="font-mono-nums absolute bottom-24 right-6 text-bone-dim/40">+</span>
 
-      {/* Эргэдэг чимэглэл — зүүн талд 4 хошуут од */}
       <div className="absolute left-[8%] top-1/3 hidden w-20 text-ember opacity-10 md:block">
         <svg className="rotate-slow" viewBox="0 0 80 80" fill="none">
           <path
@@ -59,7 +45,6 @@ export default function HeroBackground() {
           />
         </svg>
       </div>
-      {/* Баруун талд төвлөрсөн цагирагууд */}
       <div className="absolute right-[8%] top-2/3 hidden w-20 text-ember opacity-10 md:block">
         <svg className="rotate-slow-reverse" viewBox="0 0 80 80" fill="none">
           <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="1" />

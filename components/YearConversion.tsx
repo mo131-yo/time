@@ -27,7 +27,6 @@ export default function YearConversion({
           className="mb-12 text-center"
         />
 
-        {/* Нэг жилийн хөрвүүлэлт (тогтмол лавлагаа) */}
         <div className="reveal mx-auto mb-14 grid max-w-lg grid-cols-3 gap-4 text-center">
           <div>
             <div className="font-mono-nums text-2xl text-bone sm:text-3xl">
@@ -61,7 +60,6 @@ export default function YearConversion({
           урсаж, буурсаар байна:
         </p>
 
-        {/* Өнөөдрөөс наслах насны төгсгөл хүртэлх задаргаа — амьд урсдаг */}
         <div className="reveal">
           <TimeBreakdownGrid breakdown={remaining} size="md" />
         </div>

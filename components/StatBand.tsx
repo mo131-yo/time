@@ -5,7 +5,6 @@ import { LifeEstimate, LifeProfile } from "@/lib/lifeExpectancy";
 import { percentUsed } from "@/lib/time";
 import AnimatedNumber from "./AnimatedNumber";
 
-/** k3studios-ийн хар stats зурвас — scroll дээр count-up хийдэг бодит утгуудтай. */
 export default function StatBand({
   profile,
   estimate,
@@ -13,7 +12,6 @@ export default function StatBand({
   profile: LifeProfile;
   estimate: LifeEstimate;
 }) {
-  // Рендэр бүрт өөрчлөгдөхгүй нэг удаагийн цагийн зураг (purity дүрэмд нийцүүлэв)
   const [now] = useState(() => Date.now());
   const birth = new Date(profile.birthDate).getTime();
   const daysLived = Math.floor((now - birth) / (1000 * 60 * 60 * 24));

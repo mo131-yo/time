@@ -39,11 +39,6 @@ function Cell({
   );
 }
 
-/**
- * Хугацааны задаргааг (жил/сар/өдөр/цаг/мин/сек) grid хэлбэрээр харуулна.
- * Секундыг аравтын нэг оронтой харуулж, бодит цагаар тасралтгүй урсаж буйг мэдрүүлнэ.
- * `remainingBreakdown` (үлдсэн) болон `elapsedBreakdown` (өнгөрсөн) хоёуланд ашиглагдана.
- */
 export default function TimeBreakdownGrid({
   breakdown,
   size = "md",

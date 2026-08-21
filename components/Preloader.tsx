@@ -2,23 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Сайтын theme-тэй нийцсэн preloader: бүтэн дэлгэцийн хар (bg-ink) overlay
- * дээр лого + progress bar + % тоолуур (~1.4s симуляци), дараа нь overlay
- * бүхэлдээ зөөлөн fade out хийж арилна.
- *
- * Хамгаалалт: reduced-motion болон нэг session дотор давтан зочлоход огт
- * харагдахгүй; GSAP амжилтгүй болсон ч fail-safe timeout-оор заавал арилна.
- * Идэвхтэй үедээ <html data-intro-active="1"> тавьж Hero-той синхрончлогдоно.
- */
 export default function Preloader() {
   const [active, setActive] = useState(false);
   const [done, setDone] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-
-  // Эхний шийдвэр: reduced-motion эсвэл нэг session дотор давтан зочилсон бол
-  // идэвхжүүлэхгүй. Flag бичих + setState хоёуланг нь microtask дотор хийж
-  // StrictMode-ийн давхар effect-д зөв ажиллана (1-р гүйлт цуцлагдана).
+  
   useEffect(() => {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",

@@ -75,7 +75,6 @@ async function handleStatic(request) {
   return response;
 }
 
-// Зурагнууд (static assets болон optimize хийсэн /_next/image): stale-while-revalidate
 async function handleImage(request) {
   const cache = await caches.open(IMAGE_CACHE);
   const cached = await cache.match(request);
@@ -91,7 +90,6 @@ async function handleImage(request) {
   return cached || fetchPromise;
 }
 
-// Бусад same-origin GET хүсэлт: stale-while-revalidate
 async function handleGeneric(request) {
   const cache = await caches.open(SHELL_CACHE);
   const cached = await cache.match(request);

@@ -2,10 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Товчийг хулгана дагаж бага зэрэг "татагддаг" (magnetic) болгоно.
- * Touch/pointer-coarse болон prefers-reduced-motion үед ажиллахгүй.
- */
 export function useMagnetic<T extends HTMLElement>(
   strength: number = 0.35,
 ): React.RefObject<T | null> {

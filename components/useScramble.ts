@@ -2,17 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-/** Кирилл + тоо + тэмдэгт — монгол текст үнэмшилтэй холилдоно */
 const CHARSET = "АБВГДЕЖЗИКЛМНОӨПРСТУҮХЦЧШЫЭЮЯ01!<>-_";
 
-/**
- * k3studios-ийн data-scramble маягийн hover эффект: элемент дээр хулгана
- * очиход текст нь санамсаргүй үсгээр холилдоод зүүнээс баруун тийш ~0.6s-т
- * буцаж тогтоно. Touch төхөөрөмж болон reduced-motion үед юу ч хийхгүй.
- *
- * Элементийн шууд textContent-ийг өөрчилдөг тул зөвхөн React-ийн дахин
- * рендэрлэдэггүй, статик текстэй span дээр ашиглана.
- */
 export function useScramble<T extends HTMLElement>(): React.RefObject<T | null> {
   const ref = useRef<T | null>(null);
 

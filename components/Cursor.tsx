@@ -2,10 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Захиалгат курсор — зөвхөн заагч нарийвчлалтай (pointer: fine) төхөөрөмж дээр,
- * жишээ нь touch дэлгэц дээр огт рендэрлэгдэхгүй/ажиллахгүй.
- */
 export default function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
 

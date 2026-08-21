@@ -6,11 +6,6 @@ import TimeBreakdownGrid from "./TimeBreakdownGrid";
 import SectionHeading from "./SectionHeading";
 import SectionIndex from "./SectionIndex";
 
-/**
- * Профайлаас үл хамааран харагдах — өнөөдрөөс энэ жилийн төгсгөл хүртэл
- * бодит календарь дээр тулгуурлан урсдаг countdown. Профайлгүй урсгал болон
- * үр дүнгийн урсгал хоёуланд ашиглагддаг тул хэсгийн дугаарлалт props-оор ирнэ.
- */
 export default function YearEndCountdown({
   sectionN = 2,
   sectionTotal = 3,

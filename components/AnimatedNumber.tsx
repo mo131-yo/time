@@ -7,16 +7,10 @@ interface Props {
   decimals?: number;
   duration?: number;
   className?: string;
-  /** Мянгатын таслал тавих эсэх */
   group?: boolean;
-  /** true бол дэлгэцэнд орж ирэх хүртэл 0 дээр хүлээгээд дараа нь эхэлнэ */
   startOnView?: boolean;
 }
 
-/**
- * GSAP-аар тоог 0-оос (эсвэл өмнөх утгаас) гөлгөр эргэлдүүлж харуулна.
- * Countdown-д тохиромжгүй (тэнд шууд утга харуулна); нэг удаагийн reveal-д тохиромжтой.
- */
 export default function AnimatedNumber({
   value,
   decimals = 0,
@@ -30,7 +24,6 @@ export default function AnimatedNumber({
   const fromRef = useRef(0);
   const spanRef = useRef<HTMLSpanElement>(null);
 
-  // startOnView: дэлгэцэнд орж ирэхийг нэг удаа ажиглана
   useEffect(() => {
     if (!startOnView) return;
     const el = spanRef.current;

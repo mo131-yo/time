@@ -125,7 +125,6 @@ export default function ProfileForm({
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Хүйс */}
           <div>
             <span className={labelCls}>Хүйс</span>
             <div className="grid grid-cols-2 gap-3">
@@ -147,7 +146,6 @@ export default function ProfileForm({
             </div>
           </div>
 
-          {/* Төрсөн огноо + Улс */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="birth" className={labelCls}>
@@ -181,7 +179,6 @@ export default function ProfileForm({
             </div>
           </div>
 
-          {/* Өндөр + Жин */}
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label htmlFor="height" className={labelCls}>
@@ -213,7 +210,6 @@ export default function ProfileForm({
             </div>
           </div>
 
-          {/* Тамхи */}
           <div>
             <span className={labelCls}>Тамхи</span>
             <div className="grid grid-cols-3 gap-3">
@@ -252,7 +248,6 @@ export default function ProfileForm({
             )}
           </div>
 
-          {/* Архи */}
           <div>
             <span className={labelCls}>Архи</span>
             <div className="grid grid-cols-2 gap-3">
@@ -290,7 +285,6 @@ export default function ProfileForm({
             )}
           </div>
 
-          {/* Дасгал */}
           <div>
             <span className={labelCls}>Дасгал хөдөлгөөн</span>
             <div className="grid grid-cols-2 gap-3">

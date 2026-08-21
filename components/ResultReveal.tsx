@@ -32,7 +32,6 @@ export default function ResultReveal({
         таны дадал зуршлыг тооцон гаргав.
       </p>
 
-      {/* Хүчин зүйлсийн задаргаа */}
       <div className="reveal mt-12 w-full max-w-md space-y-2 text-left">
         <div className="flex items-center justify-between border-b border-ash pb-2 text-sm">
           <span className="text-bone-dim">Суурь ({country.name})</span>

@@ -5,9 +5,6 @@ const DEFAULT_ITEMS = [
   "ХЭН Ч ХЭДЭН ЖИЛ АМЬДРАХАА МЭДЭХГҮЙ",
 ];
 
-/**
- * Хязгааргүй гүйдэг тууз — цэвэр CSS animation (JS шаардлагагүй, hover дээр зогсоно).
- */
 export default function Marquee({ items = DEFAULT_ITEMS }: { items?: string[] }) {
   const content = (
     <div className="flex shrink-0 items-center gap-8 pr-8">

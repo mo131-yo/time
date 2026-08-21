@@ -4,29 +4,21 @@ export type SmokingStatus = "never" | "former" | "current";
 
 export interface LifeProfile {
   sex: Sex;
-  birthDate: string; // ISO "YYYY-MM-DD"
+  birthDate: string; 
   countryCode: string;
   heightCm: number;
   weightKg: number;
   smokingStatus: SmokingStatus;
-  /** Зөвхөн smokingStatus === "current" үед хэрэглэгдэнэ, бусад тохиолдолд 0. */
   cigarettesPerDay: number;
-  /** 7 хоногт архи хэрэглэдэг удаа. 0 = хэрэглэдэггүй. */
   drinkOccasionsPerWeek: number;
-  /** 7 хоногт дасгал хийдэг минут. 0 = хийдэггүй. */
   exerciseMinPerWeek: number;
 }
 
 export interface LifeEstimate {
-  /** Нийт наслах нас (жилээр) */
   totalYears: number;
-  /** Суурь наслалт (улс + хүйс) */
   baseYears: number;
-  /** Дадал зуршлаас нэмэгдсэн/хасагдсан жилүүд, задаргаагаар */
   factors: { label: string; delta: number }[];
-  /** Тооцоолсон нас барах огноо (ISO) */
-  deathDate: string;
-  /** Одоогийн нас (аравтын оронтой, жилээр) */
+  deathDate: string
   ageYears: number;
 }
 
@@ -50,10 +42,6 @@ function bmiFactor(bmi: number): { label: string; delta: number } {
   return { label: "Таргалалт (BMI ≥ 30)", delta: BMI_ADJUSTMENTS.obese };
 }
 
-/**
- * Тамхины нөлөө. Өдөрт татах ширхэгийн тоо ихсэх тусам ойролцоогоор шугаман
- * буурч, дээд тал нь −10 жилээр хязгаарлагдана (маш ойролцоо тооцоо).
- */
 function smokingFactor(
   status: SmokingStatus,
   cigarettesPerDay: number,
@@ -67,10 +55,6 @@ function smokingFactor(
   };
 }
 
-/**
- * Архины нөлөө. 7 хоногт 1–7 удаа дунд зэргийн хэрэглээг бага эрсдэлтэй
- * гэж үзнэ (+0.5); 14-с дээш удаа бол эрсдэл шугаман нэмэгдэж −5 хүртэл хасна.
- */
 function alcoholFactor(occasionsPerWeek: number): {
   label: string;
   delta: number;
@@ -83,10 +67,6 @@ function alcoholFactor(occasionsPerWeek: number): {
   return { label, delta: -clamp((occasionsPerWeek - 14) * 0.3, 0, 5) };
 }
 
-/**
- * Дасгалын нөлөө. ДЭМБ-ын зөвлөдөг 7 хоногт 150 минутаас цөөн байвал бага
- * эерэг нөлөөтэй; 150-аас дээш байвал илүү их эерэг нөлөөтэй (дээд тал +4.5).
- */
 function exerciseFactor(minPerWeek: number): {
   label: string;
   delta: number;

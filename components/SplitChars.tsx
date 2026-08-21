@@ -1,8 +1,3 @@
-/**
- * Текстийг үсэг тус бүрээр `<span class="char">`-уудад хуваана — k3studios-ийн
- * per-character орох анимацид зориулав. Дэлгэц уншигчид бүтэн текстийг
- * aria-label-ээс уншина; span-ууд нь aria-hidden.
- */
 export default function SplitChars({
   text,
   className = "",

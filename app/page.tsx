@@ -22,8 +22,6 @@ export default function Home() {
   const [profile, setProfile] = useState<LifeProfile | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
-  // localStorage-оос профайл ачаална (зөвхөн client дээр).
-  // setState-ийг microtask-д хойшлуулж effect доторх sync cascade-аас зайлсхийв.
   useEffect(() => {
     let cancelled = false;
     Promise.resolve().then(() => {
@@ -36,19 +34,16 @@ export default function Home() {
     };
   }, []);
 
-  // deathDate profile-оос гарна; тооцоолол нь Date.now()-оос хамааралгүй хэсэг
   const estimate = useMemo(
     () => (profile ? estimateLifeExpectancy(profile) : null),
     [profile],
   );
 
-  // GSAP reveal — профайлын төлөв солигдох бүрт дахин холбоно
   const containerRef = useGsapReveal<HTMLDivElement>([hydrated, !!profile]);
 
   function handleSubmit(p: LifeProfile) {
     saveProfile(p);
     setProfile(p);
-    // Үр дүн рүү зөөлөн гүйлгэнэ
     requestAnimationFrame(() =>
       window.scrollTo({ top: 0, behavior: "smooth" }),
     );
@@ -57,7 +52,6 @@ export default function Home() {
   function handleReset() {
     clearProfile();
     setProfile(null);
-    // Профайл цэвэрлэгдэж, форм дахин рендэрлэгдэх хүртэл хүлээгээд шууд форм руу гүйлгэнэ
     requestAnimationFrame(() => requestAnimationFrame(() => scrollToForm()));
   }
 
@@ -65,7 +59,6 @@ export default function Home() {
     document.getElementById("form")?.scrollIntoView({ behavior: "smooth" });
   }
 
-  // Hydration mismatch-аас сэргийлж, ачаалахаас өмнө хоосон каркас
   if (!hydrated) {
     return <div className="min-h-screen" />;
   }

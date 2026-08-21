@@ -2,12 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * Бодит цагийн амьд тоолуур. GSAP-ийн ticker (requestAnimationFrame суурьтай)-аар
- * жолоодогдож, `now` (ms)-ийг ойролцоогоор `intervalMs` тутам шинэчилнэ.
- * Ингэснээр countdown/хувь зэрэг тоонууд 1 секундын үсрэлт биш, бодит цагаар
- * тасралтгүй урсаж байгаа мэдрэмж өгнө.
- */
 export function useLiveClock(intervalMs: number = 100): number {
   const [now, setNow] = useState<number>(() => Date.now());
 
